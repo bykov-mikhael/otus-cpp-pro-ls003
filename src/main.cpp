@@ -1,44 +1,34 @@
-#include <allocator.hpp>
-#include <cstddef>
-#include <cstdlib>
-#include <custom_list.hpp>
 #include <iostream>
 #include <map>
 #include <utility>
 
+#include "allocator.hpp"
+#include "custom_list.hpp"
+
 int main() {
-  /*
-   * - создание экземпляра std::map<int, int> со стандартным аллокатором
-   */
-  std::map<int, int> mMap001;
+  std::map<int, int> m1;
+  for (int i = 0; i < 10; ++i) m1[i] = factorial(i);
 
-  for (size_t stSize = 0; stSize < 10; stSize++) {
-    mMap001.insert(std::pair<int, int>(stSize, factorial(stSize)));
+  std::map<int, int, std::less<int>, Alloc<10, std::pair<const int, int>>> m2;
+  for (int i = 0; i < 10; ++i) m2[i] = factorial(i);
+
+  for (const auto& [key, value] : m2) {
+    std::cout << key << " " << value << std::endl;
   }
 
-  for (auto it001 = mMap001.begin(); it001 != mMap001.end(); it001++) {
-    std::cout << it001->first << " - " << it001->second << std::endl;
+  List<int> l1;
+  for (int i = 0; i < 10; ++i) {
+    l1.push_back(factorial(i));
   }
 
-  /*
-   * - создание экземпляра std::map<int, int> с новым аллокатором, ограниченным
-   * 10 элементами
-   */
-  std::map<int, int, std::less<int>,
-           std_11_simple_allocator<std::pair<const int, int>, 10>>
-      mMap002;
-
-  for (size_t stSize = 0; stSize < 10; stSize++) {
-    mMap002.insert(std::pair<int, int>(stSize, factorial(stSize)));
+  List<int, Alloc<10, Link<int>>> l2;
+  for (int i = 0; i < 10; ++i) {
+    l2.push_back(factorial(i));
   }
 
-  for (auto it = mMap002.begin(); it != mMap002.end(); it++) {
-    std::cout << it->first << " - " << it->second << std::endl;
+  for (auto it = l2.begin(); it != l2.end(); ++it) {
+    std::cout << *it << std::endl;
   }
 
-  /*
-   * - создание экземпляра своего контейнера со стандартным аллокатором
-   */
-
-  return EXIT_SUCCESS;
+  return 0;
 }

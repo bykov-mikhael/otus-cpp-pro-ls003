@@ -1,19 +1,18 @@
+#pragma once
+
 #include <iostream>
 #include <iterator>
 #include <memory>
 #include <string>
 
-namespace custom_list {
-
-template <typename E>
-
+template <typename Elem>
 struct Link {
-  using pointer = Link<E> *;
+  using pointer = Link<Elem> *;
 
-  E val;
+  Elem val;
   pointer next;
 
-  Link(E e, pointer p = nullptr) : val{e}, next{p} {}
+  Link(Elem e, pointer p = nullptr) : val{e}, next{p} {}
 };
 
 template <typename T, typename A = std::allocator<Link<T>>>
@@ -29,27 +28,27 @@ class List {
 
   size_t size() const { return _size; }
 
-  // class Iterator {
-  //  public:
-  //   Iterator(pointer link) : current{link} {}
+  class Iterator {
+   public:
+    Iterator(pointer link) : current{link} {}
 
-  //   Iterator &operator++() {
-  //     current = current->next;
-  //     return *this;
-  //   }
+    Iterator &operator++() {
+      current = current->next;
+      return *this;
+    }
 
-  //   T &operator*() { return current->val; }
+    T &operator*() { return current->val; }
 
-  //   bool operator==(const Iterator &b) { return current == b.current; }
+    bool operator==(const Iterator &b) { return current == b.current; }
 
-  //   bool operator!=(const Iterator &b) { return current != b.current; }
+    bool operator!=(const Iterator &b) { return current != b.current; }
 
-  //  private:
-  //   pointer current;
-  // };
+   private:
+    pointer current;
+  };
 
-  // Iterator begin() { return Iterator(first); }
-  // Iterator end() { return Iterator(nullptr); }
+  Iterator begin() { return Iterator(first); }
+  Iterator end() { return Iterator(nullptr); }
 
  private:
   pointer last;
@@ -77,4 +76,3 @@ void List<T, A>::push_back(const T &val) {
 
   ++_size;
 }
-}  // namespace custom_list

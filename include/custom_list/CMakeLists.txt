@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 
 project(custom_list VERSION 0.0.1)
 
-add_library(custom_list STATIC custom_list.hpp)
+add_library(custom_list STATIC custom_list.cpp custom_list.hpp)
 
 set_target_properties(custom_list PROPERTIES
   CXX_STANDARD 17
